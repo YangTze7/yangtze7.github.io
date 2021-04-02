@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html  lang="en" >
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+    <title>直方图均衡化 | YangTze7' blog</title>
+    <meta name="description" content="直方图均衡对影像中亮度值最密集的区域施以最大程度的对比度增强，自动降低了与正态分布直方图尾部相应的、影像中非常亮或暗的部分的对比度。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="直方图均衡化">
+<meta property="og:url" content="https://yangtze7.github.io/%E7%9B%B4%E6%96%B9%E5%9B%BE%E5%9D%87%E8%A1%A1%E5%8C%96.html">
+<meta property="og:site_name" content="YangTze7&#39; blog">
+<meta property="og:description" content="直方图均衡对影像中亮度值最密集的区域施以最大程度的对比度增强，自动降低了与正态分布直方图尾部相应的、影像中非常亮或暗的部分的对比度。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://wx1.sinaimg.cn/large/007vSSXzly1fy5bg2m118j30lt09sjrd.jpg">
+<meta property="article:published_time" content="2017-12-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-12-13T11:17:24.000Z">
+<meta property="article:author" content="yangtze7">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx1.sinaimg.cn/large/007vSSXzly1fy5bg2m118j30lt09sjrd.jpg">
+
+    
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+    
+<link rel="stylesheet" href="/css/common.min.css">
+
+
+
+    
+    
+    
+    
+        <link href="//cdn.jsdelivr.net/npm/lightgallery.js@1.1.3/dist/css/lightgallery.min.css" rel="stylesheet">
+    
+    
+    
+<link rel="stylesheet" href="/css/iconfont.min.css">
+
+    
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+    <body>
+        <header class="header header-fixture">
+    <div class="profile-search-wrap flex sm:block">
+        
+        
+        <div class="profile sm:text-center md:px-1 lg:px-3 sm:pb-4 sm:pt-6">
+            <a id="avatar" role="link" href="https://github.com/fengkx" class="inline-block lg:w-16 lg:h-16 w-8 h-8 m-2" target="_blank" rel="noopener" rel="noreferrer" >
+                <img src="https://www.gravatar.com/avatar/0bc83cb571cd1c50ba6f3e8a78ef1346?s=128" class="rounded-full" alt="avatar">
+            </a>
+            <h2 id="name" class="hidden lg:block">fengkx</h2>
+            <h3 id="title" class="hidden xl:block">Student &amp; Coder</h3>
+            
+            <small id="location" class="hidden lg:block">
+                <i class="iconfont icon-map-icon"></i>
+                Guangzhou, China
+            </small>
+            
+        </div>
+        
+        
+<div class="search flex-1 flex lg:inline-block sm:hidden lg:px-4 lg:mt-2 lg:mb-4 lg:w-full">
+    <form id="search-form" class="my-auto flex-1 lg:border lg:border-solid lg:border-gray-200">
+        <div class="input-group table bg-gray-100 lg:bg-white w-full">
+            <input id="search-input" type="text" placeholder="Search" class="inline-block w-full bg-gray-100 lg:bg-white">
+            <span class="table-cell">
+                <button name="search tigger button" disabled>
+                    <i class="iconfont icon-search m-2"></i>
+                </button>
+            </span>
+        </div>
+    </form>
+        
+<div id="content-json" data-placeholder="Search" class="invisible hidden">/content.json</div>
+<script id="search-teamplate" type="text/html" data-path="/content.json">
+    <div>
+        <div class="search-header bg-gray-400">
+            <input id="actual-search-input" model="keyword" ref="input" class="inline-block w-full h-10 px-2 py-1" placeholder="Search" type="text">
+        </div>
+        <div class="search-result bg-gray-200">
+            {{#each searchPosts}}
+            <a href="/{{ path }}" class="result-item block px-2 pb-3 mb-1 pt-1 hover:bg-indigo-100">
+                <i class="iconfont icon-file"></i>
+                <h1 class="result-title inline font-medium text-lg">{{ title }}</h1>
+                <p class="result-content text-gray-600 text-sm">{{{ text }}}</p>
+            </a>
+            {{/each}}
+        </div>
+    </div>
+</script>
+
+</div>
+
+
+        <button name="menu toogle button" id="menu-toggle-btn" class="block sm:hidden p-3" role="button" aria-expanded="false">
+            <i class="iconfont icon-hamburger"></i>
+        </button>
+    </div>
+    <nav id="menu-nav" class="hidden sm:flex flex-col">
+        
+        
+            <div class="menu-item menu-home" role="menuitem">
+                <a href="/.">
+                    <i class="iconfont icon-home" aria-hidden="true"></i>
+                    <span class="menu-title">Home</span>
+                </a>
+            </div>
+        
+        
+            <div class="menu-item menu-archives" role="menuitem">
+                <a href="/archives">
+                    <i class="iconfont icon-archive" aria-hidden="true"></i>
+                    <span class="menu-title">Archives</span>
+                </a>
+            </div>
+        
+        
+            <div class="menu-item menu-categories" role="menuitem">
+                <a href="/categories">
+                    <i class="iconfont icon-folder" aria-hidden="true"></i>
+                    <span class="menu-title">Categories</span>
+                </a>
+            </div>
+        
+        
+            <div class="menu-item menu-tags" role="menuitem">
+                <a href="/tags">
+                    <i class="iconfont icon-tag" aria-hidden="true"></i>
+                    <span class="menu-title">Tags</span>
+                </a>
+            </div>
+        
+        
+            <div class="menu-item menu-repository" role="menuitem">
+                <a href="/repository">
+                    <i class="iconfont icon-project" aria-hidden="true"></i>
+                    <span class="menu-title">Repository</span>
+                </a>
+            </div>
+        
+        
+            <div class="menu-item menu-links" role="menuitem">
+                <a href="/links">
+                    <i class="iconfont icon-friend" aria-hidden="true"></i>
+                    <span class="menu-title">Links</span>
+                </a>
+            </div>
+        
+        
+            <div class="menu-item menu-about" role="menuitem">
+                <a href="/about">
+                    <i class="iconfont icon-cup" aria-hidden="true"></i>
+                    <span class="menu-title">About</span>
+                </a>
+            </div>
+        
+        
+<div class="social-links flex sm:flex-col lg:hidden mt-5">
+    
+        <span class="social-item text-center">
+            <a target="_blank" rel="noopener" href="https://github.com/fengkx">
+                <i class="iconfont social-icon icon-github"></i>
+                <span class="menu-title hidden lg:inline">menu.github</span>
+            </a>
+        </span>
+    
+        <span class="social-item text-center">
+            <a target="_blank" rel="noopener" href="https://t.me/fengkx">
+                <i class="iconfont social-icon icon-telegram"></i>
+                <span class="menu-title hidden lg:inline">menu.telegram</span>
+            </a>
+        </span>
+    
+        <span class="social-item text-center">
+            <a target="_blank" rel="noopener" href="https://twitter.com/example">
+                <i class="iconfont social-icon icon-twitter"></i>
+                <span class="menu-title hidden lg:inline">menu.twitter</span>
+            </a>
+        </span>
+    
+        <span class="social-item text-center">
+            <a href="/atom.xml">
+                <i class="iconfont social-icon icon-rss"></i>
+                <span class="menu-title hidden lg:inline">menu.rss</span>
+            </a>
+        </span>
+    
+</div>
+
+
+    </nav>
+</header>
+
+        <section class="main-section">
+            
+    <main class="flex-1 px-4 py-14 md:px-5 lg:px-8 lg:py-4 relative min-h-screen">
+    
+
+    <article class="content article article-archives article-type-list" itemscope="">
+        <header class="article-header">
+            
+    
+        <h1 class="article-title text-lg" itemprop="name">
+            直方图均衡化
+        </h1>
+    
+
+
+
+            <p class="article-meta mb-3 text-xs">
+                <span class="article-date">
+    <i class="iconfont icon-calendar-check"></i>
+	<a href="/%E7%9B%B4%E6%96%B9%E5%9B%BE%E5%9D%87%E8%A1%A1%E5%8C%96.html" class="article-date">
+	  <time datetime="2017-12-05T16:00:00.000Z" itemprop="datePublished">Dec 6</time>
+	</a>
+</span>
+
+                
+    <span class="article-category">
+    <i class="iconfont icon-folder"></i>
+    <a class="article-category-link" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a>
+  </span>
+
+
+                
+    <span class="article-tags">
+    <i class="iconfont icon-tag"></i>
+    <a class="article-tag-none-link" href="/tags/c/" rel="tag">c++</a>
+  </span>
+
+
+                <span class="_partial/post-comment"><i class="icon icon-comment"></i>
+                    <a href="/%E7%9B%B4%E6%96%B9%E5%9B%BE%E5%9D%87%E8%A1%A1%E5%8C%96.html#comments" class="article-comment-link">
+                        Comments
+                    </a>
+                </span>
+                
+
+            </p>
+        </header>
+        <div class="marked-body article-body">
+            <p>直方图均衡对影像中亮度值最密集的区域施以最大程度的对比度增强，自动降低了与正态分布直方图尾部相应的、影像中非常亮或暗的部分的对比度。</p>
+<span id="more"></span> 
+
+<p><img src="https://wx1.sinaimg.cn/large/007vSSXzly1fy5bg2m118j30lt09sjrd.jpg" alt="image"></p>
+<p>这种方法通常用来增加许多图像的全局对比度，尤其是当图像的有用数据的对比度相当接近的时候。通过这种方法，亮度可以更好地在直方图上分布。 </p>
+<p>代码实现</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/***********************************定义全局变量****************************/</span></span><br><span class="line">FILE *fp = <span class="literal">NULL</span>;<span class="comment">//文件指针</span></span><br><span class="line">BYTE *pBmpBuf;<span class="comment">//裸数据指针</span></span><br><span class="line">CString fPath;<span class="comment">//文件路径</span></span><br><span class="line"><span class="keyword">long</span> bmpWidth;</span><br><span class="line"><span class="keyword">long</span> bmpHeight;</span><br><span class="line"><span class="keyword">long</span> linebyte;</span><br><span class="line"><span class="keyword">long</span> max;</span><br><span class="line"><span class="keyword">int</span> count[<span class="number">256</span>];</span><br><span class="line"><span class="comment">/***********************************直方图均衡化****************************/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Handle_bmp</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> bitmap, <span class="keyword">int</span> nr_pixels)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> acum[<span class="number">256</span>];</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> new_color[<span class="number">256</span>];</span><br><span class="line">	<span class="built_in">memset</span>(count, <span class="number">0</span>, <span class="keyword">sizeof</span>(count));  <span class="comment">//count the num of the pixel , to count[]  </span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;nr_pixels; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		count[bitmap[i]]++;  <span class="comment">//统计直方图每个灰度级出现的次数 </span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">256</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (count[i] &gt; max)</span><br><span class="line">			max = count[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">memcpy</span>(acum, count, <span class="keyword">sizeof</span>(acum));</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="number">256</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		acum[i] += acum[i - <span class="number">1</span>];</span><br><span class="line">	<span class="comment">//这个数组存储的就是累计的归一化直方图  </span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">256</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		new_color[i] = acum[i] * <span class="number">255</span> / acum[<span class="number">255</span>];</span><br><span class="line">		<span class="comment">//定义新的灰度对应规则 new_color[i]      </span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nr_pixels; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		bitmap[i] = new_color[bitmap[i]]; </span><br><span class="line">        <span class="comment">//对所有的像素按照均衡化的灰度对应规则进行转换</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//printf(&quot;Enhancing the quality of the picture!\n&quot;);</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/***********************************buttton click读取、处理、显示图像***************************/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CMFCApplication1Dlg::OnBnClickedButton2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">	<span class="keyword">int</span> len = WideCharToMultiByte(CP_ACP, <span class="number">0</span>, fPath, <span class="number">-1</span>, <span class="literal">NULL</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">	<span class="keyword">char</span> *ptxtTemp = <span class="keyword">new</span> <span class="keyword">char</span>[len + <span class="number">1</span>];</span><br><span class="line">	WideCharToMultiByte(CP_ACP, <span class="number">0</span>, fPath, <span class="number">-1</span>, ptxtTemp, len, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">	<span class="comment">//将路径名由cstring转为string</span></span><br><span class="line">	fopen_s(&amp;fp, ptxtTemp, <span class="string">&quot;rb&quot;</span>);<span class="comment">//以二进制打开文件</span></span><br><span class="line">	<span class="keyword">if</span> (fp == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	BITMAPFILEHEADER fileheader = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	fread(&amp;fileheader, <span class="keyword">sizeof</span>(fileheader), <span class="number">1</span>, fp);<span class="comment">//读文件头</span></span><br><span class="line">	<span class="keyword">if</span> (fileheader.bfType != <span class="number">0x4D42</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		fclose(fp);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	BITMAPINFOHEADER head;</span><br><span class="line">	fread(&amp;head, <span class="keyword">sizeof</span>(BITMAPINFOHEADER), <span class="number">1</span>, fp);<span class="comment">//读信息头</span></span><br><span class="line">	<span class="keyword">long</span> bmpWidth = head.biWidth;</span><br><span class="line">	<span class="keyword">long</span> bmpHeight = head.biHeight;</span><br><span class="line">	WORD biBitCount = head.biBitCount;</span><br><span class="line">	<span class="keyword">if</span> (biBitCount != <span class="number">24</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		::AfxMessageBox(_T(<span class="string">&quot;请选择24位位图！&quot;</span>));</span><br><span class="line">		fclose(fp);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> linebyte = (bmpWidth*biBitCount + <span class="number">31</span>) / <span class="number">32</span> * <span class="number">4</span>;<span class="comment">//一行字节数</span></span><br><span class="line">	pBmpBuf = <span class="keyword">new</span> <span class="keyword">unsigned</span> <span class="keyword">char</span>[linebyte*bmpHeight];<span class="comment">//为裸数据分配内存</span></span><br><span class="line">	fread(pBmpBuf, <span class="keyword">sizeof</span>(<span class="keyword">char</span>), linebyte*bmpHeight, fp);<span class="comment">//读取原图像裸数据</span></span><br><span class="line">    <span class="comment">//读取</span></span><br><span class="line">    </span><br><span class="line">	Handle_bmp(pBmpBuf, linebyte*bmpHeight);</span><br><span class="line">	fclose(fp);</span><br><span class="line">	<span class="comment">//处理</span></span><br><span class="line">    </span><br><span class="line">	<span class="keyword">int</span> i, j;</span><br><span class="line">	CDC* pDC = GetDlgItem(IDC_STATIC2)-&gt;GetDC();</span><br><span class="line">	<span class="keyword">for</span> (i = bmpHeight; i &gt;<span class="number">0</span>; i--)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; bmpWidth; j++)</span><br><span class="line">		&#123;</span><br><span class="line"></span><br><span class="line">			DWORD clr = RGB(*(pBmpBuf + i* linebyte + j * <span class="number">3</span> + <span class="number">2</span>), *(pBmpBuf + i* linebyte + j * <span class="number">3</span> + <span class="number">1</span>), *(pBmpBuf + i* linebyte + j * <span class="number">3</span>));</span><br><span class="line">			pDC-&gt;SetPixel(j, bmpHeight - i, clr);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">//显示</span></span><br><span class="line">    </span><br><span class="line">	<span class="keyword">delete</span>[] pBmpBuf;</span><br><span class="line">	pBmpBuf = <span class="literal">NULL</span>;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>实际上，对彩色分量rgb分别做均衡化，会产生奇异的点，一般采用的是用HSL和HSV色彩空间进行亮度的均衡即可。 </p>
+
+        </div>
+        
+<blockquote class="copyright">
+    <p><strong>Link to this article : </strong><a class="permalink" href="https://yangtze7.github.io/%E7%9B%B4%E6%96%B9%E5%9B%BE%E5%9D%87%E8%A1%A1%E5%8C%96.html">https://yangtze7.github.io/直方图均衡化.html</a></p>
+    <p><strong>This article is available under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener noreferrer">Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)</a> License</strong></p>
+</blockquote>
+
+
+    </article>
+    
+    <section id="comments">
+        
+    </section>
+
+
+    
+
+</main>
+
+
+<aside style="" id="sidebar" class="aside aside-fixture">
+    <div class="toc-sidebar">
+        <nav id="toc" class="article-toc">
+            <h3 class="toc-title">Catalogue</h3>
+            
+        </nav>
+    </div>
+</aside>
+
+
+
+
+
+        </section>
+        <footer class="hidden lg:block fixed bottom-0 left-0 sm:w-1/12 lg:w-1/6 bg-gray-100 z-40">
+    
+    <div class="footer-social-links">
+        
+            <a target="_blank" rel="noopener" href="https://github.com/fengkx">
+                <i class="iconfont icon-github"></i>
+            </a>
+        
+            <a target="_blank" rel="noopener" href="https://t.me/fengkx">
+                <i class="iconfont icon-telegram"></i>
+            </a>
+        
+            <a target="_blank" rel="noopener" href="https://twitter.com/example">
+                <i class="iconfont icon-twitter"></i>
+            </a>
+        
+            <a href="/atom.xml">
+                <i class="iconfont icon-rss"></i>
+            </a>
+        
+    </div>
+    
+    
+</footer>
+
+        <div id="mask" class="hidden mask fixed inset-0 bg-gray-900 opacity-75 z-40"></div>
+        <div id="search-view-container" class="hidden shadow-xl"></div>
+        
+<script src="/js/dom-event.min.js"></script>
+
+
+
+<script src="/js/local-search.min.js"></script>
+
+
+
+    <script src="//cdn.jsdelivr.net/npm/lightgallery.js@1.1.3/dist/js/lightgallery.min.js"></script>
+    
+<script src="/js/light-gallery.min.js"></script>
+
+
+
+
+
+    </body>
+</html>
