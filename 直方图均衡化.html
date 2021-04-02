@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>直方图均衡化 | YangTze7&#39; blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="直方图均衡对影像中亮度值最密集的区域施以最大程度的对比度增强，自动降低了与正态分布直方图尾部相应的、影像中非常亮或暗的部分的对比度。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="直方图均衡化">
+<meta property="og:url" content="https://yangtze7.github.io/%E7%9B%B4%E6%96%B9%E5%9B%BE%E5%9D%87%E8%A1%A1%E5%8C%96.html">
+<meta property="og:site_name" content="YangTze7&#39; blog">
+<meta property="og:description" content="直方图均衡对影像中亮度值最密集的区域施以最大程度的对比度增强，自动降低了与正态分布直方图尾部相应的、影像中非常亮或暗的部分的对比度。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://wx1.sinaimg.cn/large/007vSSXzly1fy5bg2m118j30lt09sjrd.jpg">
+<meta property="article:published_time" content="2017-12-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-12-13T11:17:24.000Z">
+<meta property="article:author" content="yangtze7">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://wx1.sinaimg.cn/large/007vSSXzly1fy5bg2m118j30lt09sjrd.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="YangTze7' blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YangTze7&#39; blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://yangtze7.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-直方图均衡化" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/%E7%9B%B4%E6%96%B9%E5%9B%BE%E5%9D%87%E8%A1%A1%E5%8C%96.html" class="article-date">
+  <time class="dt-published" datetime="2017-12-05T16:00:00.000Z" itemprop="datePublished">2017-12-06</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      直方图均衡化
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <p>直方图均衡对影像中亮度值最密集的区域施以最大程度的对比度增强，自动降低了与正态分布直方图尾部相应的、影像中非常亮或暗的部分的对比度。</p>
+<span id="more"></span> 
+
+<p><img src="https://wx1.sinaimg.cn/large/007vSSXzly1fy5bg2m118j30lt09sjrd.jpg" alt="image"></p>
+<p>这种方法通常用来增加许多图像的全局对比度，尤其是当图像的有用数据的对比度相当接近的时候。通过这种方法，亮度可以更好地在直方图上分布。 </p>
+<p>代码实现</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/***********************************定义全局变量****************************/</span></span><br><span class="line">FILE *fp = <span class="literal">NULL</span>;<span class="comment">//文件指针</span></span><br><span class="line">BYTE *pBmpBuf;<span class="comment">//裸数据指针</span></span><br><span class="line">CString fPath;<span class="comment">//文件路径</span></span><br><span class="line"><span class="keyword">long</span> bmpWidth;</span><br><span class="line"><span class="keyword">long</span> bmpHeight;</span><br><span class="line"><span class="keyword">long</span> linebyte;</span><br><span class="line"><span class="keyword">long</span> max;</span><br><span class="line"><span class="keyword">int</span> count[<span class="number">256</span>];</span><br><span class="line"><span class="comment">/***********************************直方图均衡化****************************/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Handle_bmp</span><span class="params">(<span class="keyword">unsigned</span> <span class="keyword">char</span> bitmap, <span class="keyword">int</span> nr_pixels)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">int</span> acum[<span class="number">256</span>];</span><br><span class="line">	<span class="keyword">unsigned</span> <span class="keyword">char</span> new_color[<span class="number">256</span>];</span><br><span class="line">	<span class="built_in">memset</span>(count, <span class="number">0</span>, <span class="keyword">sizeof</span>(count));  <span class="comment">//count the num of the pixel , to count[]  </span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i&lt;nr_pixels; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		count[bitmap[i]]++;  <span class="comment">//统计直方图每个灰度级出现的次数 </span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">256</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">if</span> (count[i] &gt; max)</span><br><span class="line">			max = count[i];</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">memcpy</span>(acum, count, <span class="keyword">sizeof</span>(acum));</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; <span class="number">256</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		acum[i] += acum[i - <span class="number">1</span>];</span><br><span class="line">	<span class="comment">//这个数组存储的就是累计的归一化直方图  </span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">256</span>; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		new_color[i] = acum[i] * <span class="number">255</span> / acum[<span class="number">255</span>];</span><br><span class="line">		<span class="comment">//定义新的灰度对应规则 new_color[i]      </span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nr_pixels; i++)</span><br><span class="line">	&#123;</span><br><span class="line">		bitmap[i] = new_color[bitmap[i]]; </span><br><span class="line">        <span class="comment">//对所有的像素按照均衡化的灰度对应规则进行转换</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//printf(&quot;Enhancing the quality of the picture!\n&quot;);</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/***********************************buttton click读取、处理、显示图像***************************/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CMFCApplication1Dlg::OnBnClickedButton2</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;	</span><br><span class="line">	<span class="keyword">int</span> len = WideCharToMultiByte(CP_ACP, <span class="number">0</span>, fPath, <span class="number">-1</span>, <span class="literal">NULL</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">	<span class="keyword">char</span> *ptxtTemp = <span class="keyword">new</span> <span class="keyword">char</span>[len + <span class="number">1</span>];</span><br><span class="line">	WideCharToMultiByte(CP_ACP, <span class="number">0</span>, fPath, <span class="number">-1</span>, ptxtTemp, len, <span class="literal">NULL</span>, <span class="literal">NULL</span>);</span><br><span class="line">	<span class="comment">//将路径名由cstring转为string</span></span><br><span class="line">	fopen_s(&amp;fp, ptxtTemp, <span class="string">&quot;rb&quot;</span>);<span class="comment">//以二进制打开文件</span></span><br><span class="line">	<span class="keyword">if</span> (fp == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	BITMAPFILEHEADER fileheader = &#123; <span class="number">0</span> &#125;;</span><br><span class="line">	fread(&amp;fileheader, <span class="keyword">sizeof</span>(fileheader), <span class="number">1</span>, fp);<span class="comment">//读文件头</span></span><br><span class="line">	<span class="keyword">if</span> (fileheader.bfType != <span class="number">0x4D42</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		fclose(fp);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	BITMAPINFOHEADER head;</span><br><span class="line">	fread(&amp;head, <span class="keyword">sizeof</span>(BITMAPINFOHEADER), <span class="number">1</span>, fp);<span class="comment">//读信息头</span></span><br><span class="line">	<span class="keyword">long</span> bmpWidth = head.biWidth;</span><br><span class="line">	<span class="keyword">long</span> bmpHeight = head.biHeight;</span><br><span class="line">	WORD biBitCount = head.biBitCount;</span><br><span class="line">	<span class="keyword">if</span> (biBitCount != <span class="number">24</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		::AfxMessageBox(_T(<span class="string">&quot;请选择24位位图！&quot;</span>));</span><br><span class="line">		fclose(fp);</span><br><span class="line">		<span class="keyword">return</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">int</span> linebyte = (bmpWidth*biBitCount + <span class="number">31</span>) / <span class="number">32</span> * <span class="number">4</span>;<span class="comment">//一行字节数</span></span><br><span class="line">	pBmpBuf = <span class="keyword">new</span> <span class="keyword">unsigned</span> <span class="keyword">char</span>[linebyte*bmpHeight];<span class="comment">//为裸数据分配内存</span></span><br><span class="line">	fread(pBmpBuf, <span class="keyword">sizeof</span>(<span class="keyword">char</span>), linebyte*bmpHeight, fp);<span class="comment">//读取原图像裸数据</span></span><br><span class="line">    <span class="comment">//读取</span></span><br><span class="line">    </span><br><span class="line">	Handle_bmp(pBmpBuf, linebyte*bmpHeight);</span><br><span class="line">	fclose(fp);</span><br><span class="line">	<span class="comment">//处理</span></span><br><span class="line">    </span><br><span class="line">	<span class="keyword">int</span> i, j;</span><br><span class="line">	CDC* pDC = GetDlgItem(IDC_STATIC2)-&gt;GetDC();</span><br><span class="line">	<span class="keyword">for</span> (i = bmpHeight; i &gt;<span class="number">0</span>; i--)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span> (j = <span class="number">0</span>; j &lt; bmpWidth; j++)</span><br><span class="line">		&#123;</span><br><span class="line"></span><br><span class="line">			DWORD clr = RGB(*(pBmpBuf + i* linebyte + j * <span class="number">3</span> + <span class="number">2</span>), *(pBmpBuf + i* linebyte + j * <span class="number">3</span> + <span class="number">1</span>), *(pBmpBuf + i* linebyte + j * <span class="number">3</span>));</span><br><span class="line">			pDC-&gt;SetPixel(j, bmpHeight - i, clr);</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">    <span class="comment">//显示</span></span><br><span class="line">    </span><br><span class="line">	<span class="keyword">delete</span>[] pBmpBuf;</span><br><span class="line">	pBmpBuf = <span class="literal">NULL</span>;</span><br><span class="line">	<span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>实际上，对彩色分量rgb分别做均衡化，会产生奇异的点，一般采用的是用HSL和HSV色彩空间进行亮度的均衡即可。 </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yangtze7.github.io/%E7%9B%B4%E6%96%B9%E5%9B%BE%E5%9D%87%E8%A1%A1%E5%8C%96.html" data-id="ckmzrkqt1002xd87kczs9e99q" data-title="直方图均衡化" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/%E9%81%A5%E6%84%9F%E5%BD%B1%E5%83%8F%E7%9A%84%E7%89%B9%E5%BE%81%E7%A9%BA%E9%97%B4%E5%9B%BE.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          遥感影像的特征空间图
+        
+      </div>
+    </a>
+  
+  
+    <a href="/BMP%E5%9B%BE%E5%83%8F%E8%AF%BB%E5%8F%96.html" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">BMP图像读取</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/GEE/">GEE</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95/">经典算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">遥感图像处理</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/WEBGIS/" rel="tag">WEBGIS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gdal/" rel="tag">gdal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matlab/" rel="tag">matlab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9C%B0%E8%B4%A8%E7%81%BE%E5%AE%B3/" rel="tag">地质灾害</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BA%A6%E6%97%A5%E7%B3%BB%E6%95%B0/" rel="tag">度日系数</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B0%94%E5%80%99%E5%8F%98%E5%8C%96/" rel="tag">气候变化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%83%A1%E6%80%9D%E4%B9%B1%E6%83%B3/" rel="tag">胡思乱想</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%81%A5%E6%84%9F%E6%B0%B4%E6%96%87/" rel="tag">遥感水文</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/WEBGIS/" style="font-size: 10px;">WEBGIS</a> <a href="/tags/c/" style="font-size: 12.5px;">c++</a> <a href="/tags/gdal/" style="font-size: 10px;">gdal</a> <a href="/tags/matlab/" style="font-size: 10px;">matlab</a> <a href="/tags/python/" style="font-size: 12.5px;">python</a> <a href="/tags/%E5%9C%B0%E8%B4%A8%E7%81%BE%E5%AE%B3/" style="font-size: 12.5px;">地质灾害</a> <a href="/tags/%E5%BA%A6%E6%97%A5%E7%B3%BB%E6%95%B0/" style="font-size: 10px;">度日系数</a> <a href="/tags/%E6%B0%94%E5%80%99%E5%8F%98%E5%8C%96/" style="font-size: 17.5px;">气候变化</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 15px;">深度学习</a> <a href="/tags/%E8%83%A1%E6%80%9D%E4%B9%B1%E6%83%B3/" style="font-size: 10px;">胡思乱想</a> <a href="/tags/%E9%81%A5%E6%84%9F%E6%B0%B4%E6%96%87/" style="font-size: 20px;">遥感水文</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/Remote-Sensing-Evaluation-of-Heavy-Precipitation-Simulated-by-the-WRF-Model-Using-4D-Var-Data-Assimilation-with-TRMM-3B42-and-GPM-IMERG-over-the-Huaihe-Basin,-China.html">Remote Sensing Evaluation of Heavy Precipitation Simulated by the WRF Model Using 4D-Var Data Assimilation with TRMM 3B42 and GPM IMERG over  the Huaihe Basin, China</a>
+          </li>
+        
+          <li>
+            <a href="/Monitoring%20the%20spatial%20distribution%20and%20changes%20in%20permafrost%20with%20passive%20microwave%20remote%20sensing.html">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/doc1.html">半年胡思乱想</a>
+          </li>
+        
+          <li>
+            <a href="/Comparsion%20of%20Different%20Machine%20Learning%20Model%20For%20Landslide%20Susceptibility.html">Comparsion of Different Machine Learning Model For Landslide Susceptibility Mapping</a>
+          </li>
+        
+          <li>
+            <a href="/Landslide%20Susceptibility%20Mapping%20Using%20Logistic%20Regression%20Model%20Based%20On%20Information%20Value%20for%20the%20Region%20Along%20China-Thailand%20Railway%20from%20Saraburi%20To%20Sikhio,Thailand.html">Landslide Susceptibility Mapping Using Logistic Regression Model Based On Information Value for the Region Along China-Thailand Railway from Saraburi To Sikhio,Thailand</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 yangtze7<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>

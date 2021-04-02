@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>BMP图像读取 | YangTze7&#39; blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="C++读取BMP格式图像BMP格式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="BMP图像读取">
+<meta property="og:url" content="https://yangtze7.github.io/BMP%E5%9B%BE%E5%83%8F%E8%AF%BB%E5%8F%96.html">
+<meta property="og:site_name" content="YangTze7&#39; blog">
+<meta property="og:description" content="C++读取BMP格式图像BMP格式">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2017-11-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2018-10-05T04:34:12.000Z">
+<meta property="article:author" content="yangtze7">
+<meta property="article:tag" content="c++">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="YangTze7' blog" type="application/atom+xml">
+  
+  
+    <link rel="shortcut icon" href="/favicon.png">
+  
+  
+    
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/typeface-source-code-pro@0.0.71/index.min.css">
+
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">YangTze7&#39; blog</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://yangtze7.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-BMP图像读取" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/BMP%E5%9B%BE%E5%83%8F%E8%AF%BB%E5%8F%96.html" class="article-date">
+  <time class="dt-published" datetime="2017-11-22T16:00:00.000Z" itemprop="datePublished">2017-11-23</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      BMP图像读取
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h1 id="C-读取BMP格式图像"><a href="#C-读取BMP格式图像" class="headerlink" title="C++读取BMP格式图像"></a>C++读取BMP格式图像</h1><h2 id="BMP格式"><a href="#BMP格式" class="headerlink" title="BMP格式"></a>BMP格式</h2><span id="more"></span> 
+
+<p>BMP（全称Bitmap）是Windows操作系统中的标准图像文件格式，可以分成两类：设备相关位图（DDB）和设备无关位图（DIB），使用非常广。它采用位映射存储格式，除了图像深度可选以外，不采用其他任何压缩，因此，BMP文件所占用的空间很大。BMP文件的图像深度可选lbit、4bit、8bit及24bit。BMP文件存储数据时，图像的扫描方式是按从左到右、从下到上的顺序。由于BMP文件格式是Windows环境中交换与图有关的数据的一种标准，因此在Windows环境中运行的图形图像软件都支持BMP图像格式。</p>
+<h3 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h3><h4 id="BITMAPFILEHEADER"><a href="#BITMAPFILEHEADER" class="headerlink" title="BITMAPFILEHEADER"></a>BITMAPFILEHEADER</h4><pre><code>typedef struct tagBITMAPFILEHEADER &#123;
+WORD    bfType;
+DWORD   bfSize;
+WORD    bfReserved1;
+WORD    bfReserved2;
+DWORD   bfOffBits;
+&#125; BITMAPFILEHEADER, FAR *LPBITMAPFILEHEADER, *PBITMAPFILEHEADER;
+</code></pre>
+<h4 id="BITMAPINFOHEADER"><a href="#BITMAPINFOHEADER" class="headerlink" title="BITMAPINFOHEADER"></a>BITMAPINFOHEADER</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">tagBITMAPINFOHEADER</span>&#123;</span></span><br><span class="line">DWORD      biSize;</span><br><span class="line">LONG       biWidth;</span><br><span class="line">LONG       biHeight;</span><br><span class="line">WORD       biPlanes;</span><br><span class="line">WORD       biBitCount;</span><br><span class="line">DWORD      biCompression;</span><br><span class="line">DWORD      biSizeImage;</span><br><span class="line">LONG       biXPelsPerMeter;</span><br><span class="line">LONG       biYPelsPerMeter;</span><br><span class="line">DWORD      biClrUsed;</span><br><span class="line">DWORD      biClrImportant;</span><br><span class="line">&#125; BITMAPINFOHEADER, FAR *LPBITMAPINFOHEADER, *PBITMAPINFOHEADER;</span><br></pre></td></tr></table></figure>
+<h4 id="RGBQUAD"><a href="#RGBQUAD" class="headerlink" title="RGBQUAD"></a>RGBQUAD</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> <span class="title">tagRGBQUAD</span> &#123;</span></span><br><span class="line">BYTE    rgbBlue;</span><br><span class="line">BYTE    rgbGreen;</span><br><span class="line">BYTE    rgbRed;</span><br><span class="line">BYTE    rgbReserved;</span><br><span class="line">&#125; RGBQUAD;</span><br></pre></td></tr></table></figure>
+<p>当biBitCount=24时，没有颜色表项。</p>
+<h4 id="图像数据"><a href="#图像数据" class="headerlink" title="图像数据"></a>图像数据</h4><p>记录了位图的每一个像素值，记录顺序是在扫描行内是从左到右，扫描行之间是从下到上。位图的一个像素值所占的字节数：</p>
+<p>当biBitCount=1时，8个像素占1个字节；</p>
+<p>当biBitCount=4时，2个像素占1个字节；</p>
+<p>当biBitCount=8时，1个像素占1个字节；</p>
+<p>当biBitCount=24时，1个像素占3个字节,按顺序分别为B,G,R；</p>
+<h2 id="C-读取24位真彩色BMP图像"><a href="#C-读取24位真彩色BMP图像" class="headerlink" title="C++读取24位真彩色BMP图像"></a>C++读取24位真彩色BMP图像</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line">include &lt;fstream&gt;</span><br><span class="line">include &lt;iomanip&gt;</span><br><span class="line">include &lt;stdlib.h&gt;</span><br><span class="line">include &lt;windows.h&gt;<span class="comment">//含有BMP文件头结构体</span></span><br><span class="line"><span class="comment">//BMP文件由文件头BITMAPFILEHEADER、位图信息头BITMAPINFOHEADER、调色板RGBQUAD和图像数据四部分组成，对于24位bmp无调色板</span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">int</span> bmpwidth,bmpheight,linebyte;</span><br><span class="line"><span class="keyword">unsigned</span> <span class="keyword">char</span> *pBmpBuf;  <span class="comment">//图像数据指针</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">readBmp</span><span class="params">(<span class="keyword">char</span> *bmpName)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	FILE *fp;</span><br><span class="line">	<span class="keyword">int</span> count_xiang_su=<span class="number">0</span>,m=<span class="number">0</span>,n= <span class="number">0</span>;</span><br><span class="line">	<span class="keyword">if</span>( (fp = <span class="built_in">fopen</span>(bmpName,<span class="string">&quot;rb&quot;</span>)) == <span class="literal">NULL</span>)  <span class="comment">//以二进制的方式打开文件</span></span><br><span class="line">	&#123;</span><br><span class="line">    	cout&lt;&lt;<span class="string">&quot;The file &quot;</span>&lt;&lt;bmpName&lt;&lt;<span class="string">&quot;was not opened&quot;</span>&lt;&lt;endl;</span><br><span class="line">    	<span class="keyword">return</span> FALSE;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span>(<span class="built_in">fseek</span>(fp,<span class="built_in"><span class="keyword">sizeof</span></span>(BITMAPFILEHEADER),<span class="number">0</span>))  <span class="comment">//跳过BITMAPFILEHEADE文件头</span></span><br><span class="line">	&#123;</span><br><span class="line">    	cout&lt;&lt;<span class="string">&quot;跳转失败&quot;</span>&lt;&lt;endl;</span><br><span class="line">    	<span class="keyword">return</span> FALSE;</span><br><span class="line">	&#125;</span><br><span class="line">	BITMAPINFOHEADER infoHead;</span><br><span class="line">	<span class="built_in">fread</span>(&amp;infoHead,<span class="built_in"><span class="keyword">sizeof</span></span>(BITMAPINFOHEADER),<span class="number">1</span>,fp);   <span class="comment">//从fp中读取BITMAPINFOHEADER文件头信息到infoHead中,同时fp的指针移动到图像数据起点</span></span><br><span class="line">	bmpwidth = infoHead.biWidth;</span><br><span class="line">	bmpheight = infoHead.biHeight;</span><br><span class="line">	linebyte = (bmpwidth*<span class="number">24</span>/<span class="number">8</span>+<span class="number">3</span>)/<span class="number">4</span>*<span class="number">4</span>; <span class="comment">//计算每行的字节数，24：该图片是24位的bmp图，当biBitCount=24时，1个像素占3个字节,按顺序分别为B,G,R</span></span><br><span class="line"></span><br><span class="line">	pBmpBuf = <span class="keyword">new</span> <span class="keyword">unsigned</span> <span class="keyword">char</span>[linebyte*bmpheight];<span class="comment">//指针个数为图像裸数据总字节数</span></span><br><span class="line"></span><br><span class="line">	<span class="built_in">fread</span>(pBmpBuf, <span class="built_in"><span class="keyword">sizeof</span></span>(<span class="keyword">char</span>), linebyte*bmpheight, fp);<span class="comment">//读取图像裸数据</span></span><br><span class="line">	<span class="function">ofstream <span class="title">outfile</span><span class="params">(<span class="string">&quot;图像像素.txt&quot;</span>, ios::in | ios::trunc)</span></span>;<span class="comment">//写出裸数据</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i =bmpheight<span class="number">-1</span>; i&gt;=<span class="number">0</span>; i--)<span class="comment">//bmp记录顺序是在扫描行内是从左到右，扫描行之间是从下到上，原点为左下，倒序原点改为左上</span></span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j&lt;bmpwidth; j++)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> k = <span class="number">2</span>; k&gt;=<span class="number">0</span>; k--)<span class="comment">//1个像素占3个字节,按顺序分别为B,G,R，逆序以RGB顺序输出</span></span><br><span class="line">			&#123;</span><br><span class="line">				m = *(pBmpBuf + i*linebyte + j * <span class="number">3</span> + k);<span class="comment">//格式控制</span></span><br><span class="line">				<span class="keyword">if</span> (k == <span class="number">2</span>)</span><br><span class="line">					outfile &lt;&lt; <span class="string">&quot;(&quot;</span>;</span><br><span class="line">				outfile &lt;&lt;<span class="built_in">setw</span>(<span class="number">3</span>)&lt;&lt; m;</span><br><span class="line">				<span class="keyword">if</span> (k != <span class="number">0</span>)</span><br><span class="line">					outfile &lt;&lt; <span class="string">&quot;,&quot;</span>;</span><br><span class="line">				<span class="keyword">if</span> (k == <span class="number">0</span>)</span><br><span class="line">					outfile &lt;&lt; <span class="string">&quot;)&quot;</span>;</span><br><span class="line">				count_xiang_su++;</span><br><span class="line">				<span class="keyword">if</span> (count_xiang_su %(bmpwidth*<span class="number">3</span>) == <span class="number">0</span>)</span><br><span class="line">				&#123;</span><br><span class="line">					outfile &lt;&lt; endl;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			n++;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;总的像素个数为:&quot;</span> &lt;&lt; n &lt;&lt; endl&lt;&lt;<span class="string">&quot;图像高度为:&quot;</span>&lt;&lt;bmpheight&lt;&lt;endl&lt;&lt;<span class="string">&quot;图像宽度为:&quot;</span>&lt;&lt;bmpwidth&lt;&lt;endl;</span><br><span class="line">	cout &lt;&lt; <span class="string">&quot;----------------------------------------------------&quot;</span> &lt;&lt; endl;</span><br><span class="line">	<span class="built_in">fclose</span>(fp);   <span class="comment">//关闭文件</span></span><br><span class="line">	<span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"><span class="keyword">char</span> readFileName[] = <span class="string">&quot;test.BMP&quot;</span>;</span><br><span class="line"><span class="keyword">if</span>(!<span class="built_in">readBmp</span>(readFileName))</span><br><span class="line">    cout&lt;&lt;<span class="string">&quot;readfile error!&quot;</span>&lt;&lt;endl;</span><br><span class="line">cin.<span class="built_in">get</span>();</span><br><span class="line"><span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://yangtze7.github.io/BMP%E5%9B%BE%E5%83%8F%E8%AF%BB%E5%8F%96.html" data-id="ckmzrkqro0008d87k57ulctl8" data-title="BMP图像读取" class="article-share-link">Share</a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/c/" rel="tag">c++</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/%E7%9B%B4%E6%96%B9%E5%9B%BE%E5%9D%87%E8%A1%A1%E5%8C%96.html" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          直方图均衡化
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/GEE/">GEE</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BB%8F%E5%85%B8%E7%AE%97%E6%B3%95/">经典算法</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB/">论文阅读</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%81%A5%E6%84%9F%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">遥感图像处理</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/WEBGIS/" rel="tag">WEBGIS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/c/" rel="tag">c++</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/gdal/" rel="tag">gdal</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/matlab/" rel="tag">matlab</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/python/" rel="tag">python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%9C%B0%E8%B4%A8%E7%81%BE%E5%AE%B3/" rel="tag">地质灾害</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%BA%A6%E6%97%A5%E7%B3%BB%E6%95%B0/" rel="tag">度日系数</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B0%94%E5%80%99%E5%8F%98%E5%8C%96/" rel="tag">气候变化</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" rel="tag">深度学习</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E8%83%A1%E6%80%9D%E4%B9%B1%E6%83%B3/" rel="tag">胡思乱想</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E9%81%A5%E6%84%9F%E6%B0%B4%E6%96%87/" rel="tag">遥感水文</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/WEBGIS/" style="font-size: 10px;">WEBGIS</a> <a href="/tags/c/" style="font-size: 12.5px;">c++</a> <a href="/tags/gdal/" style="font-size: 10px;">gdal</a> <a href="/tags/matlab/" style="font-size: 10px;">matlab</a> <a href="/tags/python/" style="font-size: 12.5px;">python</a> <a href="/tags/%E5%9C%B0%E8%B4%A8%E7%81%BE%E5%AE%B3/" style="font-size: 12.5px;">地质灾害</a> <a href="/tags/%E5%BA%A6%E6%97%A5%E7%B3%BB%E6%95%B0/" style="font-size: 10px;">度日系数</a> <a href="/tags/%E6%B0%94%E5%80%99%E5%8F%98%E5%8C%96/" style="font-size: 17.5px;">气候变化</a> <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" style="font-size: 15px;">深度学习</a> <a href="/tags/%E8%83%A1%E6%80%9D%E4%B9%B1%E6%83%B3/" style="font-size: 10px;">胡思乱想</a> <a href="/tags/%E9%81%A5%E6%84%9F%E6%B0%B4%E6%96%87/" style="font-size: 20px;">遥感水文</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/12/">December 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/01/">January 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/04/">April 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/Remote-Sensing-Evaluation-of-Heavy-Precipitation-Simulated-by-the-WRF-Model-Using-4D-Var-Data-Assimilation-with-TRMM-3B42-and-GPM-IMERG-over-the-Huaihe-Basin,-China.html">Remote Sensing Evaluation of Heavy Precipitation Simulated by the WRF Model Using 4D-Var Data Assimilation with TRMM 3B42 and GPM IMERG over  the Huaihe Basin, China</a>
+          </li>
+        
+          <li>
+            <a href="/Monitoring%20the%20spatial%20distribution%20and%20changes%20in%20permafrost%20with%20passive%20microwave%20remote%20sensing.html">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/doc1.html">半年胡思乱想</a>
+          </li>
+        
+          <li>
+            <a href="/Comparsion%20of%20Different%20Machine%20Learning%20Model%20For%20Landslide%20Susceptibility.html">Comparsion of Different Machine Learning Model For Landslide Susceptibility Mapping</a>
+          </li>
+        
+          <li>
+            <a href="/Landslide%20Susceptibility%20Mapping%20Using%20Logistic%20Regression%20Model%20Based%20On%20Information%20Value%20for%20the%20Region%20Along%20China-Thailand%20Railway%20from%20Saraburi%20To%20Sikhio,Thailand.html">Landslide Susceptibility Mapping Using Logistic Regression Model Based On Information Value for the Region Along China-Thailand Railway from Saraburi To Sikhio,Thailand</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2021 yangtze7<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.4.1.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
