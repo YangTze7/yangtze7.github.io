@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>About on Changjiang Shi</title>
+    <link>https://yangtze7.github.io/</link>
+    <description>Recent content in About on Changjiang Shi</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Thu, 26 May 2022 21:00:13 +0800</lastBuildDate><atom:link href="https://yangtze7.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Blog</title>
+      <link>https://yangtze7.github.io/post/blog/</link>
+      <pubDate>Thu, 26 May 2022 21:00:13 +0800</pubDate>
+      
+      <guid>https://yangtze7.github.io/post/blog/</guid>
+      <description>My fist test</description>
+    </item>
+    
+    <item>
+      <title>About</title>
+      <link>https://yangtze7.github.io/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yangtze7.github.io/about/</guid>
+      <description>About Me Ph.D candidate at Aerospace Information Research Institute, Chinese Academy of Sciences.
+Research Interest   Intelligent understanding of remote sensing images.
+  Data assimilation.
+  Publications In chronological order:
+ C. Shi, Z. Zhang, W. Zhang, C. Zhang and Q. Xu, &amp;ldquo;Learning Multiscale Temporal-Spatial-Spectral Features via a Multi-path Convolutional LSTM Neural Network for Change Detection with Hyperspectral Images,&amp;rdquo; in IEEE Transactions on Geoscience and Remote Sensing, doi: 10.</description>
+    </item>
+    
+    <item>
+      <title>Contact</title>
+      <link>https://yangtze7.github.io/contact/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://yangtze7.github.io/contact/</guid>
+      <description> Email: changjiang07@outlook.com Wechat: yangtze0708   Address  No.9 Dengzhuang South Road, Haidian District
+Beijing
+China
+  </description>
+    </item>
+    
+  </channel>
+</rss>
